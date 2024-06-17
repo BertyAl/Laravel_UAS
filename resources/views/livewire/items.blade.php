@@ -8,6 +8,7 @@
         </span>
     </div>
     @endif
+
     <div class="mt-8 text-2xl flex justify-between">
         <div>Items</div>
         <div class="mr-2">
@@ -19,7 +20,7 @@
 
     <div class="mt-6">
         <div class="flex justify-between">
-            <div class="">
+            <div>
                 <input wire:model.debounce.500ms="q" type="search" placeholder="Search" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
             <div class="mr-2">
@@ -43,6 +44,12 @@
                 </th>
                 <th class="px-4 py-2">
                     <div class="flex items-center">
+                        <button wire:click="sortBy('stock')">Stock</button>
+                        <x-sort-icon sortField="stock" :sort-by="$sortBy" :sort-asc="$sortAsc" />
+                    </div>
+                </th>
+                <th class="px-4 py-2">
+                    <div class="flex items-center">
                         <button wire:click="sortBy('price')">Price</button>
                         <x-sort-icon sortField="price" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                     </div>
@@ -62,15 +69,16 @@
             <tr>
                 <td class="border px-4 py-2">{{ $item->id}}</td>
                 <td class="border px-4 py-2">{{ $item->name}}</td>
+                <td class="border px-4 py-2">{{ $item->stock}}</td>
                 <td class="border px-4 py-2">{{ number_format($item->price, 2)}}</td>
                 @if(!$active)
                 <td class="border px-4 py-2">{{ $item->status ? 'Active' : 'Not-Active'}}</td>
                 @endif
                 <td class="border px-4 py-2">
-                    <x-button wire:click="confirmItemEdit( {{ $item->id}})" class="bg-orange-500 hover:bg-orange-700">
+                    <x-button wire:click="confirmItemEdit({{ $item->id }})" class="bg-orange-500 hover:bg-orange-700">
                         Edit
                     </x-button>
-                    <x-danger-button wire:click="confirmItemDeletion( {{ $item->id}})" wire:loading.attr="disabled">
+                    <x-danger-button wire:click="confirmItemDeletion({{ $item->id }})" wire:loading.attr="disabled">
                         Delete
                     </x-danger-button>
                 </td>
@@ -84,18 +92,19 @@
         {{ $items->links() }}
     </div>
 
+    <!-- Confirmation Modal for Item Deletion -->
     <x-confirmation-modal wire:model="confirmingItemDeletion">
         <x-slot name="title">
             {{ __('Delete Item') }}
         </x-slot>
 
         <x-slot name="content">
-            {{ __('Are you sure you want to delete Item? ') }}
+            {{ __('Are you sure you want to delete this item?') }}
         </x-slot>
 
         <x-slot name="footer">
             <x-secondary-button wire:click="$set('confirmingItemDeletion', false)" wire:loading.attr="disabled">
-                {{ __('Nevermind') }}
+                {{ __('Cancel') }}
             </x-secondary-button>
 
             <x-danger-button class="ml-2" wire:click="deleteItem({{ $confirmingItemDeletion }})" wire:loading.attr="disabled">
@@ -104,9 +113,10 @@
         </x-slot>
     </x-confirmation-modal>
 
+    <!-- Modal for Adding/Editing Item -->
     <x-dialog-modal wire:model="confirmingItemAdd">
         <x-slot name="title">
-            {{ isset( $this->item->id) ? 'Edit Item' : 'Add Item'}}
+            {{ isset($item['id']) ? 'Edit Item' : 'Add Item' }}
         </x-slot>
 
         <x-slot name="content">
@@ -114,6 +124,12 @@
                 <x-label for="name" value="{{ __('Name') }}" />
                 <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="item.name" />
                 <x-input-error for="item.name" class="mt-2" />
+            </div>
+
+            <div class="col-span-6 sm:col-span-4">
+                <x-label for="stock" value="{{ __('Stock') }}" />
+                <x-input id="stock" type="text" class="mt-1 block w-full" wire:model.defer="item.stock" />
+                <x-input-error for="item.stock" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4 mt-4">
@@ -132,11 +148,11 @@
 
         <x-slot name="footer">
             <x-secondary-button wire:click="$set('confirmingItemAdd', false)" wire:loading.attr="disabled">
-                {{ __('Nevermind') }}
+                {{ __('Cancel') }}
             </x-secondary-button>
 
             <x-danger-button class="ml-2" wire:click="saveItem()" wire:loading.attr="disabled">
-                {{ __('Save') }}
+                {{ isset($item['id']) ? __('Update') : __('Add') }}
             </x-danger-button>
         </x-slot>
     </x-dialog-modal>

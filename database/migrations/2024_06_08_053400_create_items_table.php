@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id')->index();
             $table->string('name');
+//            $table->integer('stock', 1,0 );
             $table->float('price', 8, 2);
             $table->boolean('status');
             $table->timestamps();

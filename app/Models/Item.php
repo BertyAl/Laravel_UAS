@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'price', 'status'];
+    protected $fillable = ['name', 'stock', 'price', 'status'];
 
-    public function user() 
+    public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    public function scopeActive( $query) 
+    public function scopeActive( $query)
     {
         return $query->where('status', 1);
     }
