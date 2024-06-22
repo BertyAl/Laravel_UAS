@@ -36,3 +36,24 @@ Route::middleware([
         return view('items');
     })->name('items');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/item-entry', function () {
+        return view('itemM-K');
+    })->name('item-entry');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/item-exit', function () {
+        return view('item-exit');
+    })->name('item-exit');
+});
+

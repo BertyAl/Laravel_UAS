@@ -18,9 +18,19 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('items') }}" :active="request()->routeIs('items')">
-                        {{ __('Items') }}
+                        {{ __('Barang') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('item-entry') }}" :active="request()->routeIs('item-entry')">
+                        {{ __('Pendataan') }}
+                    </x-nav-link>
+                </div>
+<!--                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">-->
+<!--                    <x-nav-link href="{{ route('items') }}" :active="request()->routeIs('items')">-->
+<!--                        {{ __('Items') }}-->
+<!--                    </x-nav-link>-->
+<!--                </div>-->
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
