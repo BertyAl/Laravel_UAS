@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Item;
+use App\Models\Log;
 
 class ItemEntry extends Component
 {
@@ -23,8 +24,10 @@ class ItemEntry extends Component
         $item = Item::find($this->item_id);
         $item->stock += $this->quantity;
         $item->save();
+        Log::create(['action' => 'Barang Masuk: ' . $item->name . ' (Jumlah: ' . $this->quantity . ')']);
+        $this->dispatch('logUpdated');
         $this->message = 'Barang Berhasil Masuk';
-//        session()->flash('message', 'Barang telah berhasil ditambahkan');
+
         $this->reset(['item_id', 'quantity']);
     }
 
