@@ -16,6 +16,9 @@
                         <livewire:item-exit />
                     </div>
                 </div>
+                <div class="bg-white shadow-xl sm:rounded-lg mt-6">
+                    <livewire:logs />
+                </div>
             </div>
         </div>
     </div>

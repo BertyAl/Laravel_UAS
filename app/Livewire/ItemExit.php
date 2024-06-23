@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Item;
+use App\Models\Log;
 
 class ItemExit extends Component
 {
@@ -29,8 +30,11 @@ class ItemExit extends Component
 
         $item->stock -= $this->quantity;
         $item->save();
-
+        Log::create([
+            'action' => 'Barang Keluar: ' . $item->name . ' (Jumlah: ' . $this->quantity . ')'
+        ]);
         $this->message = 'Barang Berhasil Keluar.';
+        $this->dispatch('logUpdated');
         $this->reset(['item_id', 'quantity']);
     }
 
