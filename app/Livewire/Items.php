@@ -20,15 +20,10 @@ class Items extends Component
         'status' => false,
     ];
 
+    protected $queryString = ['active' => ['except' => false], 'q' => ['except' => ''], 'sortBy' => ['except' => 'id'], 'sortAsc' => ['except' => true]];
+
     public $confirmingItemDeletion = false;
     public $confirmingItemAdd = false;
-
-    protected $queryString = [
-        'active' => ['except' => false],
-        'q' => ['except' => ''],
-        'sortBy' => ['except' => 'id'],
-        'sortAsc' => ['except' => true],
-    ];
 
     protected $rules = [
         'item.name' => 'required|string|min:4',
@@ -39,42 +34,53 @@ class Items extends Component
 
     public function render()
     {
-        $items = Item::where('user_id', auth()->user()->id)
+        $query = Item::where('user_id', auth()->user()->id)
+            // searching method
             ->when($this->q, function($query) {
                 return $query->where(function($query) {
-                    $query->where('name', 'like', '%'.$this->q . '%')
-                        ->orWhere('stock','like', '%'.$this->q . '%')
-                        ->orWhere('price', 'like', '%' . $this->q . '%');
+                    $query->where('name', 'ilike', '%' . $this->q . '%')
+                        ->orWhere('stock', 'ilike', '%' . $this->q . '%')
+                        ->orWhere('price', 'ilike', '%' . $this->q . '%');
                 });
             })
-            ->when($this->active, function($query) {
-                return $query->active();
-            })
-            ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
-        $items = $items->paginate(10);
+            // active status method
+            ->when($this->active, function($query) {
+                return $query->where('status', true);
+            })
+            // orderby method
+            ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC')
+            //pagination method
+            ->paginate(10);
+
 
         return view('livewire.items', [
-            'items' => $items,
+            'items' => $query,
         ]);
     }
-
-    public function updatingActive()
+    public function toggleActive()
     {
+        $this->active = !$this->active;
+
+        // Reset pagination when toggling active state
         $this->resetPage();
     }
-
     public function updatingQ()
     {
         $this->resetPage();
     }
 
-    public function sortBy($field)
+    public function refreshSearch()
     {
-        if ($field == $this->sortBy) {
+        $this->resetPage();
+    }
+
+    public function sortedBy($field)
+    {
+        if ($field === $this->sortBy) {
             $this->sortAsc = !$this->sortAsc;
         }
-        $this->sortBy = $field;
+       $this->sortBy = $field;
     }
 
     public function confirmItemDeletion($id)
@@ -86,7 +92,7 @@ class Items extends Component
     {
         $item->delete();
         $this->confirmingItemDeletion = false;
-        session()->flash('message', 'Item Deleted Successfully');
+        session()->flash('message', 'Barang berhasil dihapus');
     }
 
     public function confirmItemAdd()
@@ -112,9 +118,6 @@ class Items extends Component
     {
         $this->validate();
 
-        // Debugging: Check item data
-        logger()->info('Saving Item:', $this->item);
-
         if (isset($this->item['id'])) {
             $existingItem = Item::find($this->item['id']);
             $existingItem->update($this->item);
@@ -126,7 +129,7 @@ class Items extends Component
                 'price' => $this->item['price'],
                 'status' => $this->item['status'] ?? 0
             ]);
-            session()->flash('message', 'Item Added Successfully');
+            session()->flash('message', 'Barang berhasil ditambahkan');
         }
 
         $this->confirmingItemAdd = false;
