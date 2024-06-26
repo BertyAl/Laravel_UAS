@@ -18,8 +18,10 @@
     <body class="antialiased">
     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
         <div class="w-full lg:w-3/4 xl:w-2/3 h-auto mx-auto p-6 lg:p-8 bg-white shadow-lg rounded-lg">
-            <div class="text-center text-2xl font-bold text-gray-900 sm:text-center">
-                Asia Baru Motor
+
+            <div class="text-center text-gray-900 sm:text-center">
+                <img src="{{ asset('images/Auto Repair.png') }}" alt="Logo Asia Baru Motor" class="w-48 mx-auto">
+
             </div>
             <div class="flex justify-center mt-8">
                 @if (Route::has('login'))
@@ -35,8 +37,8 @@
                 </div>
                 @endif
             </div>
-            <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
-                <div class="text-center text-sm text-gray-500 sm:text-right">
+{{--            <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">--}}
+                <div class="text-center text-sm text-gray-500 sm:text-center mt-16">
                     Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                 </div>
             </div>

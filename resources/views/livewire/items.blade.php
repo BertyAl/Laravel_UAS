@@ -30,9 +30,15 @@
                            placeholder="Search"
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                 </div>
+{{--                @dump ($active)--}}
                 <div class="mr-2">
-                    <input type="checkbox" class="mr-2 leading-tight" wire:model="active" />Active Only?
+                    <input type="checkbox" class="mr-2 leading-tight" wire:click="toggleActive" />Active Only?
                 </div>
+{{--                @if(!$active)--}}
+{{--                <div class="mr-2">--}}
+{{--                    <input type="checkbox" class="mr-2 leading-tight" wire:click="toggleActive" />Not-Active Only?--}}
+{{--                </div>--}}
+{{--                @endif--}}
             </div>
 {{--            Table isi konten--}}
                 <table class="table-auto w-full">
@@ -40,33 +46,31 @@
                     <tr>
                         <th class="px-4 py-2">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('id')">ID</button>
+                                <button wire:click="sortedBy('id')">ID</button>
                                 <x-sort-icon sortField="id" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                             </div>
                         </th>
                         <th class="px-4 py-2">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('name')">Name</button>
+                                <button wire:click="sortedBy('name')">Name</button>
                                 <x-sort-icon sortField="name" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                             </div>
                         </th>
                         <th class="px-4 py-2">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('stock')">Stock</button>
+                                <button wire:click="sortedBy('stock')">Stock</button>
                                 <x-sort-icon sortField="stock" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                             </div>
                         </th>
                         <th class="px-4 py-2">
                             <div class="flex items-center">
-                                <button wire:click="sortBy('price')">Price</button>
+                                <button wire:click="sortedBy('price')">Price</button>
                                 <x-sort-icon sortField="price" :sort-by="$sortBy" :sort-asc="$sortAsc" />
                             </div>
                         </th>
-                        @if(!$active)
                         <th class="px-4 py-2">
                             Status
                         </th>
-                        @endif
                         <th class="px-4 py-2">
                             Actions
                         </th>
@@ -79,9 +83,7 @@
                         <td class="border px-4 py-2">{{ $item->name}}</td>
                         <td class="border px-4 py-2">{{ $item->stock}}</td>
                         <td class="border px-4 py-2">{{ number_format($item->price, 3)}}</td>
-                        @if(!$active)
                         <td class="border px-4 py-2">{{ $item->status ? 'Active' : 'Not-Active'}}</td>
-                        @endif
                         <td class="border px-4 py-2">
                             <x-button wire:click="confirmItemEdit({{ $item->id }})" class="bg-orange-500 hover:bg-orange-700">
                                 Edit
@@ -95,11 +97,9 @@
                     </tbody>
                 </table>
 {{--            table isi kontent end--}}
-        </div>
-
-        <div class="mt-4">
             {{ $items->links() }}
         </div>
+
 
 {{--        popup item delete--}}
         <x-confirmation-modal wire:model="confirmingItemDeletion">

@@ -19,4 +19,5 @@ class Item extends Model
     {
         return $query->where('status', 1);
     }
+
 }

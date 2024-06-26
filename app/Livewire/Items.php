@@ -19,8 +19,8 @@ class Items extends Component
         'price' => '',
         'status' => false,
     ];
-    // query string untuk melakukan pencarian pada search bar
-    protected $queryString = ['active', 'q', 'sortBy', 'sortAsc'];
+
+    protected $queryString = ['active' => ['except' => false], 'q' => ['except' => ''], 'sortBy' => ['except' => 'id'], 'sortAsc' => ['except' => true]];
 
     public $confirmingItemDeletion = false;
     public $confirmingItemAdd = false;
@@ -32,63 +32,62 @@ class Items extends Component
         'item.status' => 'boolean'
     ];
 
-//  return to blade view
     public function render()
     {
-        $items = Item::where('user_id', auth()->user()->id)
+        $query = Item::where('user_id', auth()->user()->id)
+            // searching method
             ->when($this->q, function($query) {
                 return $query->where(function($query) {
-                    // penggunaan ilike untuk mencari data yang mirip dengan mengabaikan huruf besar/kecil
                     $query->where('name', 'ilike', '%' . $this->q . '%')
-                        ->orWhere('stock','ilike', '%' . $this->q . '%')
+                        ->orWhere('stock', 'ilike', '%' . $this->q . '%')
                         ->orWhere('price', 'ilike', '%' . $this->q . '%');
                 });
             })
-            ->when($this->active, function($query) {
-                return $query->active();
-            })
-            ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC');
 
-        $items = $items->paginate(10);
+            // active status method
+            ->when($this->active, function($query) {
+                return $query->where('status', true);
+            })
+            // orderby method
+            ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC')
+            //pagination method
+            ->paginate(10);
+
 
         return view('livewire.items', [
-            'items' => $items,
+            'items' => $query,
         ]);
     }
-
-    // reset page ketika filter di pencet
-    public function updatingActive()
+    public function toggleActive()
     {
+        $this->active = !$this->active;
+
+        // Reset pagination when toggling active state
         $this->resetPage();
     }
     public function updatingQ()
     {
         $this->resetPage();
     }
+
     public function refreshSearch()
     {
-        $this->resetPage(); // Reset pagination when search query changes
+        $this->resetPage();
     }
 
-    //fungsi untuk fitur sorting
-    public function sortBy($field)
+    public function sortedBy($field)
     {
-        if ($this->sortBy === $field) {
+        if ($field === $this->sortBy) {
             $this->sortAsc = !$this->sortAsc;
-        } else {
-            $this->sortAsc = true;
         }
-
-        $this->sortBy = $field;
+       $this->sortBy = $field;
     }
 
-    //konfirmasi delete
     public function confirmItemDeletion($id)
     {
         $this->confirmingItemDeletion = $id;
     }
 
-    // fungsi delete item
     public function deleteItem(Item $item)
     {
         $item->delete();
@@ -96,7 +95,6 @@ class Items extends Component
         session()->flash('message', 'Barang berhasil dihapus');
     }
 
-    // fungsi confirmasi item ditambahkan
     public function confirmItemAdd()
     {
         $this->reset(['item']);
@@ -109,7 +107,6 @@ class Items extends Component
         $this->confirmingItemAdd = true;
     }
 
-    // fungsi konfirmasi item di edit
     public function confirmItemEdit(Item $item)
     {
         $this->resetErrorBag();
@@ -117,13 +114,9 @@ class Items extends Component
         $this->confirmingItemAdd = true;
     }
 
-    //fungsi menyimpan item
     public function saveItem()
     {
         $this->validate();
-
-        // Debugging: Check item data
-        logger()->info('Saving Item:', $this->item);
 
         if (isset($this->item['id'])) {
             $existingItem = Item::find($this->item['id']);
