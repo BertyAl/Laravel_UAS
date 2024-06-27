@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+![image](https://github.com/BertyAl/Laravel_UAS/assets/131771057/e4457d26-9567-41d2-9d31-358e859d084e)<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
@@ -23,6 +23,9 @@ Make sure you have the following installed on your machine:
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
+
+### Installation Video
+DEMO : [![Watch the video](https://img.youtube.com/vi/f_lXF4JXEl4/maxresdefault.jpg)](https://youtu.be/f_lXF4JXEl4)
 
 ### Installation
 
