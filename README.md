@@ -56,21 +56,12 @@ Make sure you have the following installed on your machine:
       DB_PASSWORD=your_database_password
       ```
 
-5. **Set up Braintree credentials for PayPal (optional):**
-    - Add the following lines to your `.env` file:
-      ```sh
-      BRAINTREE_ENV=sandbox
-      BRAINTREE_MERCHANT_ID=your_merchant_id
-      BRAINTREE_PUBLIC_KEY=your_public_key
-      BRAINTREE_PRIVATE_KEY=your_private_key
-      ```
-
-6. **Install Node.js dependencies:**
+5. **Install Node.js dependencies:**
     ```sh
     npm install
     ```
 
-7. **Run the development server:**
+6. **Run the development server:**
     ```sh
     npm run watch
     ```
