@@ -7,11 +7,23 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Security Vulnerabilities
+### Anggota Kelompok
+
+<p >
+<a >Albert 535220024</a>
+</p>
+<p>
+<a >Jonathan 535220026</a>
+</p>
+<p>
+<a >Jonatan Putra Gunawan 535220009</a>
+</p>
+
+### Security Vulnerabilities
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+### License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT)...
 
